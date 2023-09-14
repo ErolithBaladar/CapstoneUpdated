@@ -1,0 +1,5 @@
+h2 {
+  float: left;
+  background-color: yellow;
+  background-clip: padding-box, content-box;
+}
