@@ -1,13 +1,15 @@
 import { Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./App.css";
-import AllItems from "./components/AllItems";
-import SingleItems from "./components/SingleItems";
+import AllItems from "./components/ItemListAll";
+import SingleItems from "./components/SingleItem";
 import Nav from "./components/Nav";
-
+import LoginForm from "./components/LoginForm";
+import CategoriesLister from "./components/Categories";
 function App() {
   return (
     <div className="App">
-      <h1>Chairs.inc</h1>
+      <LoginForm />
       <Nav />
       <Routes>
         <Route path="/" element={<AllItems />} />

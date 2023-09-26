@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchSingleItems } from "../api";
+import { fetchSingleItem } from "../api";
 import ItemCard from "./ItemCard";
 
 export default function SingleItems() {
@@ -11,11 +11,14 @@ export default function SingleItems() {
 
   useEffect(() => {
     async function getSingleItems() {
-      const APIResponse = await fetchSingleItems(id);
-      if (APIResponse.success) {
-        setItems(APIResponse.data.Items);
-      } else {
-        setError(error.message);
+      const APIResponse = await fetchSingleItem(id);
+      console.log(APIResponse);
+      if (APIResponse) {
+        setItems(APIResponse);
+        console.log(Items + "Items within");
+      }
+      else {
+        setError("Error");
       }
     }
     getSingleItems();
@@ -24,7 +27,7 @@ export default function SingleItems() {
   return (
     <div>
       {error && <p>{error}</p>}
-      {Items && <ItemCard player={Items} />}
+      {Items && <ItemCard Items={Items} />}
     </div>
   );
 }

@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { deleteItems } from "../api";
+import { deleteItem } from "../api";
 import styles from "../css/ItemsCard.module.css";
 
 export default function ItemsCard({ Items }) {
+  console.log("After" + Items);
   const navigate = useNavigate();
 
   async function handleDelete() {
     try {
-      const result = await deleteItems(Items.id);
+      const result = await deleteItem(Items.id);
       console.log(result);
       navigate("/");
     } catch (error) {
@@ -19,12 +20,14 @@ export default function ItemsCard({ Items }) {
       <figure>
         <img
           className={styles.img}
-          src={Items.imageUrl}
+          src={Items.image}
           alt=""
         />
         <figcaption>
-          <p>Name: {Items.name}</p>
-          <p>Desc: {Items.Desc}</p>
+          <p>Name: {Items.title}</p>
+          <p>Desc: {Items.description}</p>
+          <p>Price: {Items.price}</p>
+          <p>Rating: {Items.rating.rate} Count: {Items.rating.count}</p>
         </figcaption>
       </figure>
       <button onClick={handleDelete}>Delete Items</button>

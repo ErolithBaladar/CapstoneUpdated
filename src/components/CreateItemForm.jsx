@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import { createItems } from "../api";
+import { createItem } from "../api";
 //Ignore errors here because it will grab and update from the API objects
 export default function CreateItemsForm({ Items, setItems }) {
-  const [name, setName] = useState("");
-  const [Desc, setDesc] = useState("");
+  const [Title, setTitle] = useState("");
+  const [Description, setDescription] = useState("");
   const [error, setError] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const APIData = await createItems(name, Desc);
-    if (APIData.success) {
+    const APIData = await createItem(Title, Description);
+    if (APIData) {
       console.log("New Item: ", APIData.data.newItem);
 
       // Resetting all Items manually
-      const newItemsList = [...Items, APIData.data.newItems];
+      const newItemsList = [...Items, APIData.newItems];
       setItems(newItemsList);
 
-      setName("");
-      setDesc("");
+      setTitle("");
+      setDescription("");
     } else {
-      setError(APIData.error.message);
+      setError("Error");
     }
   }
 
@@ -27,18 +27,18 @@ export default function CreateItemsForm({ Items, setItems }) {
     <form onSubmit={handleSubmit}>
       {error && <p>{error}</p>}
       <input
-        value={name}
+        value={Title}
         type="text"
-        name="name"
-        placeholder="name"
-        onChange={(e) => setName(e.target.value)}
+        name="Title"
+        placeholder="Title"
+        onChange={(e) => setTitle(e.target.value)}
       />
       <input
-        value={Desc}
+        value={Description}
         type="text"
-        name="Desc"
-        placeholder="Desc"
-        onChange={(e) => setDesc(e.target.value)}
+        name="Description"
+        placeholder="Description"
+        onChange={(e) => setDescription(e.target.value)}
       />
       <button>Submit</button>
     </form>

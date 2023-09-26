@@ -1,45 +1,62 @@
 import { useState, useEffect } from "react";
-import { fetchAllItems } from "../api";
+import { fetchAllItems, CategoriesControl } from "../api";
 import ItemsListName from "./ItemListName";
 import CreateItemForm from "./CreateItemForm";
+import CategoriesNamer from "./Categories";
 
 export default function Allitems() {
   const [Items, setItems] = useState([]);
+  const [Categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
   const [searchParam, setSearchParam] = useState("");
 
   useEffect(() => {
     async function getAllItems() {
       const APIResponse = await fetchAllItems();
-      if (APIResponse.success) {
-        setItems(APIResponse.data.players);
+      console.log(APIResponse);
+      if (APIResponse) {
+        setItems(APIResponse);
       } else {
-        setError(APIResponse.error.message);
+        setError("Error");
       }
     }
+
+    async function getAllCategories() {
+      const options = await CategoriesControl();
+      console.log("Tester" + options);
+      setCategories(options);
+    }
+    getAllCategories();
     getAllItems();
   }, []);
 
-  const ItemsToDisplay = searchParam
-    ? Items.filter((Items) => Items.name.toLowerCase().includes(searchParam))
-    : Items;
-  return (
-    <div>
+  const ItemsToDisplay = Items;
+  console.log("Categories" + Categories);
+   /* if (Categories !== null) {
+    for(var i = 0; i < Items.length; i++){
+      if(Items[i].category == Categories){
+        return (
+          <div>
+            <CategoriesNamer Categories={Categories} />
+    
+            {ItemsToDisplay.map((Items) => {
+              return <ItemsListName key={Items[i]} Items={Items} />;
+            })}
+          </div>
+        )
+      }
+    }
+  } 
+  else {  */
+    return (
       <div>
-        <label>
-          Search:{" "}
-          <input
-            type="text"
-            placeholder="search"
-            onChange={(e) => setSearchParam(e.target.value.toLowerCase())}
-          />
-        </label>
+        <CategoriesNamer Categories={Categories} />
+        {/* Set items from the array => objects into a array */}
+
+        {ItemsToDisplay.map((Items) => {
+          return <ItemsListName key={Items.id} Items={Items} />;
+        })}
       </div>
-      <CreateItemForm Items={Items} setitems={setItems} />
-      {error && <p>{error}</p>}
-      {ItemsToDisplay.map((Items) => {
-        return <ItemsListName key={Items.id} Items={Items} />;
-      })}
-    </div>
-  );
-}
+    );
+  }
+//}
