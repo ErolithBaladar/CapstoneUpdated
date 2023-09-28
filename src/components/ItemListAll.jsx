@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { fetchAllItems, CategoriesControl } from "../api";
-import ItemsListName from "./ItemListName";
-import CreateItemForm from "./CreateItemForm";
+import { useEffect, useState } from "react";
+import { CategoriesControl, fetchAllItems } from "../api";
 import CategoriesNamer from "./Categories";
+import ItemsListName from "./ItemListName";
+
+let gTotalItems = [];
 
 export default function Allitems() {
-  const [Items, setItems] = useState([]);
-  const [Categories, setCategories] = useState([]);
+  const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
   const [searchParam, setSearchParam] = useState("");
 
@@ -15,7 +16,8 @@ export default function Allitems() {
       const APIResponse = await fetchAllItems();
       console.log(APIResponse);
       if (APIResponse) {
-        setItems(APIResponse);
+        gTotalItems = APIResponse;
+        setItems(gTotalItems);
       } else {
         setError("Error");
       }
@@ -30,33 +32,31 @@ export default function Allitems() {
     getAllItems();
   }, []);
 
-  const ItemsToDisplay = Items;
-  console.log("Categories" + Categories);
-   /* if (Categories !== null) {
-    for(var i = 0; i < Items.length; i++){
-      if(Items[i].category == Categories){
-        return (
-          <div>
-            <CategoriesNamer Categories={Categories} />
-    
-            {ItemsToDisplay.map((Items) => {
-              return <ItemsListName key={Items[i]} Items={Items} />;
-            })}
-          </div>
-        )
+  const onSelectedCategory = (category) => {
+    let newItems = gTotalItems.filter((item) => {
+      if (item.category === category) {
+        return true;
       }
-    }
-  } 
-  else {  */
-    return (
-      <div>
-        <CategoriesNamer Categories={Categories} />
-        {/* Set items from the array => objects into a array */}
 
-        {ItemsToDisplay.map((Items) => {
-          return <ItemsListName key={Items.id} Items={Items} />;
-        })}
-      </div>
-    );
-  }
-//}
+      return false;
+    });
+
+    setItems([...newItems]);
+  };
+
+  console.log("Categories in itemlist" + document.getElementById(categories));
+  return (
+    <div>
+      <CategoriesNamer
+        Categories={categories}
+        onSelectedCategory={(category) => onSelectedCategory(category)}
+      />
+      {/* Set items from the array => objects into a array */}
+
+      {items.map((item, itemIndex) => {
+        return <ItemsListName key={itemIndex} item={item} />;
+      })}
+    </div>
+  );
+}
+

@@ -7,7 +7,7 @@ const Login = () => {
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  var LoginID = "0";
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -16,6 +16,8 @@ const Login = () => {
       for (var i = 0; i < LoginUser.length; i++){
         if(LoginUser[i].UserName == user && LoginUser[i].PassWord == pwd){
           setSuccess(true);
+          LoginID = LoginUser[i].id;
+          console.log("LoginID: " + LoginID);
         }
       }
       setUser("");
@@ -24,7 +26,7 @@ const Login = () => {
       if (success == false) {
         setErrMsg(true);
         console.log("Error state" + errMsg);
-        console.log("Success state" + success);
+        console.log("Success state" + success);       
       }
       console.log("Success state" + errMsg);
       //setSuccess(true);
@@ -32,7 +34,6 @@ const Login = () => {
       setErrMsg("Login Failed");
     }
   };
-
       if(success == true ) {
         return (
           <>
@@ -111,3 +112,7 @@ const Login = () => {
 };
 
 export default Login;
+
+/* 
+localStorage["Userid"] = (parseInt(localStorage["Userid"]) || 0) + Userid;
+document.getElementById('storage').innerHTML = localStorage["Userid"] + " Userid"; */

@@ -1,20 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/ItemListAll.module.css";
+import ItemsListName from "./ItemListName";
 
-export default function ItemsListName({ item }) {
+export default function ListCartButton({ Items }) {
+
   console.log("Next");
+  console.log(Items);
   const navigate = useNavigate();
+  const CartToDisplay = Items;
   return (
     <div>
       <button
         onClick={() => {
-          navigate(`/${item.id}`);
+          navigate(`/cart`);
         }}
       >
-        <h3>{item.title}</h3>
+        <h3>{"Cart"}</h3>
 
-        <img className={styles.img} src={item?.image} alt="null" />
       </button>
     </div>
   );

@@ -1,4 +1,4 @@
-const baseUrl = `https://fakestoreapi.com/products`;
+const baseUrl = `https://fakestoreapi.com`;
 export async function fetchAllItems() {
   try {
     const response = await fetch(`https://fakestoreapi.com/products`);
@@ -13,8 +13,9 @@ export async function fetchAllItems() {
 export async function fetchSingleItem(id) {
   try {
     // Postman BaseURL/ID is what should be used ( https://fakestoreapi.com/products/1 )
-    const response = await fetch(`${baseUrl}/${id}`);
+    const response = await fetch(`${baseUrl}/products/${id}`);
     const result = await response.json();
+    console.log("Resulting return : " + response);
     return result;
   } catch (error) {
     console.error(error);
@@ -23,7 +24,7 @@ export async function fetchSingleItem(id) {
 
 export async function createItem(title, description) {
   try {
-    const response = await fetch(`${baseUrl}/`, {
+    const response = await fetch(`${baseUrl}/products/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -42,7 +43,7 @@ export async function createItem(title, description) {
 
 export async function deleteItem(id) {
   try {
-    const response = await fetch(`${baseUrl}/${id}`, {
+    const response = await fetch(`${baseUrl}/products/${id}`, {
       method: "DELETE"
     });
     const result = await response.json();
@@ -54,7 +55,7 @@ export async function deleteItem(id) {
 
 export async function CategoriesControl(){
   try {
-    const response = await fetch(`${baseUrl}/categories`);
+    const response = await fetch(`${baseUrl}/products/categories`);
     const result = await response.json();
     console.log("Result" + result);
     return result;
@@ -66,7 +67,7 @@ export async function CategoriesControl(){
 
 export async function CategoriesSender(category){
     try {
-      const response = await fetch(`${baseUrl}/category/${category}`);
+      const response = await fetch(`${baseUrl}/products/category/${category}`);
       const result = await response.json();
       console.log(result);
       return result;
@@ -77,17 +78,49 @@ export async function CategoriesSender(category){
 
 }
 
-export async function Cart(cart){
+export async function CartList(AccountID){
   try{
-    const response = await fetch(`${baseUrl}/carts?userId=1`);
+    console.log("AccountID" + AccountID);
+    const response = await fetch(`${baseUrl}/carts/${AccountID}`)
     const result = await response.json();
-    console.log(result);
-    return result;
+    console.log("Result" + JSON.stringify(result));
+    return JSON.stringify(result);
 
   }
   catch (error) {
     console.error("Error");
   }
 
+}
+
+export async function AddItemToCart(productID, Quantity, AccountID) {
+  try {
+    const response = await fetch(`${baseUrl}/carts/${AccountID}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        productID,
+        Quantity
+      })
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function deleteItemToCart(AccountID) {
+  try {
+    const response = await fetch(`${baseUrl}/carts/${AccountID}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
